@@ -18,6 +18,8 @@ app.use(methodOverride('_method'));
 
 // ROUTES
 app.use('/', require('./routes/index'));
+app.use('/auth', require('./routes/auth'));
+app.use('/app', require('./routes/app'));
 
 // SOCKET
 const sockets = require('./routes/sockets')(io);
