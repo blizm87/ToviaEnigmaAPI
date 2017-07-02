@@ -1,6 +1,8 @@
+require('dotenv').config()
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const session = require('express-session');
 const morgan = require('morgan');
 const methodOverride = require('method-override');
 const path = require('path');
@@ -14,6 +16,7 @@ app.use(cors())
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(session({secret: 'keyboard cat', resave: false, saveUninitialized: true}))
 app.use(methodOverride('_method'));
 
 // ROUTES
