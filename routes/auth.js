@@ -77,7 +77,7 @@ router.get('/callback', (req, res, next) => {
           imageUrl: imageUrl
         }))
 
-      res.redirect(`http://127.0.0.1:3000?imageUrl=${imageUrl}`)
+      res.redirect(`http://127.0.0.1:3000?userId=${userInfo.id}`)
     });
 
   });
