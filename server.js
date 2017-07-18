@@ -6,23 +6,33 @@ const session = require('express-session');
 const morgan = require('morgan');
 const methodOverride = require('method-override');
 const path = require('path');
+const graphQLHTTP = require('express-graphql')
+const Schema = require('./db/testSchema.js');
 
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
 // CONFIG
-app.use(cors())
+require('./db/config.js');
+app.use(cors());
 app.use(morgan('dev'));
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(session({secret: 'keyboard cat', resave: false, saveUninitialized: true}))
+app.use(session({secret: 'keyboard cat', resave: false, saveUninitialized: true}));
 app.use(methodOverride('_method'));
 
 // ROUTES
 app.use('/', require('./routes/index'));
 app.use('/auth', require('./routes/auth'));
-app.use('/app', require('./routes/app'));
+app.use('/profile', require('./routes/profile'));
+app.use('/graphql', graphQLHTTP({
+  schema: Schema,
+  graphiql: true,
+  pretty: true
+}));
+
+
 
 // SOCKET
 const sockets = require('./routes/sockets')(io);
