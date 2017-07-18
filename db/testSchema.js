@@ -1,13 +1,16 @@
-const graphql = require('graphql');
-const GraphQLInt = graphql.GraphQLInt;
-const GraphQLString = graphql.GraphQLString;
-const GraphQLList = graphql.GraphQLList;
-const GraphQLObjectType = graphql.GraphQLObjectType;
-const GraphQLSchema = graphql.GraphQLSchema;
+const {
+  graphql,
+  GraphQLString,
+  GraphQLList,
+  GraphQLObjectType,
+  GraphQLSchema
+} = require('graphql');
+
+// const GraphQLInt = graphql.GraphQLInt;
 // const GraphQLNonNull = graphql.GraphQLNonNull;
 const DB = require('./config.js');
 
-const ProfileData = new graphql.GraphQLObjectType({
+const ProfileData = new GraphQLObjectType({
   name: 'ProfileData',
   description: 'This represents a user profile data.',
   fields: () => {
@@ -40,21 +43,23 @@ const ProfileData = new graphql.GraphQLObjectType({
   }
 });
 
-const Query = new graphql.GraphQLObjectType({
+const Query = new GraphQLObjectType({
   name: 'Query',
   description: 'This is a root query',
   fields: () => {
     return {
       getProfileData: {
-        type: new GraphQLList(UserData),
+        type: new GraphQLList(ProfileData),
         resolve(root, args) {
-          return DB.models.mytest.findAll({where: args});
+          return DB.models.profiles.findAll({where: args});
         }
       }
     };
   }
 });
 
-module.exports = new GraphQLSchema({
+const Schema = new GraphQLSchema({
   query: Query
 });
+
+module.exports = Schema;

@@ -14,7 +14,6 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
 // CONFIG
-require('./db/config.js');
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
