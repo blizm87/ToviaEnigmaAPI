@@ -1,32 +1,29 @@
-const graphql = require('graphql');
-const GraphQLInt = graphql.GraphQLInt;
-const GraphQLString = graphql.GraphQLString;
-const GraphQLList = graphql.GraphQLList;
-const GraphQLSchema = graphql.GraphQLSchema;
-const GraphQLNonNull = graphql.GraphQLNonNull;
+const {
+  graphql,
+  GraphQLString,
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLSchema
+} = require('graphql');
+
 const DB = require('./config.js');
 
-const UserData = new graphql.GraphQLObjectType({
-  name: 'UserData',
+const ProfileData = new GraphQLObjectType({
+  name: 'ProfileData',
   description: 'This represents a user profile data.',
   fields: () => {
     return {
-      id: {
-        type: GraphQLInt,
-        resolve(userdata) {
-          return userdata.id;
-        }
-      },
-      displayname: {
+      userId: {
         type: GraphQLString,
         resolve(userdata) {
-          return userdata.displayname;
+          return userdata.userId;
         }
       },
-      imageurl: {
+      displayName: {
         type: GraphQLString,
         resolve(userdata) {
-          return userdata.imageurl;
+          return userdata.displayName;
         }
       },
       gender: {
@@ -35,58 +32,58 @@ const UserData = new graphql.GraphQLObjectType({
           return userdata.gender;
         }
       },
-      googleid: {
+      imageUrl: {
         type: GraphQLString,
         resolve(userdata) {
-          return userdata.googleid;
+          return userdata.imageUrl;
         }
       }
     };
   }
 });
 
-const Query = new graphql.GraphQLObjectType({
+const Query = new GraphQLObjectType({
   name: 'Query',
   description: 'This is a root query',
   fields: () => {
     return {
       getProfileData: {
-        type: new GraphQLList(UserData),
-        resolve(root, args) {
-          return DB.profiles.userdata.findAll({where: args});
+        type: new GraphQLList(ProfileData),
+        resolve(root) {
+          return DB.models.profiles.findAll();
         }
       }
     };
   }
 });
 
-const Mutation = new graphql.GraphQLObjectType({
+const Mutation = new GraphQLObjectType({
   name: 'Mutation',
   description: 'Posts data to database',
   fields: () => {
     return {
       addProfileData: {
-        type: UserData,
+        type: ProfileData,
         args: {
-          googleid: {
+          userId: {
             type: new GraphQLNonNull(GraphQLString)
           },
-          displayname: {
-            type: new GraphQLNonNull(GraphQLString)
-          },
-          imageurl: {
+          displayName: {
             type: new GraphQLNonNull(GraphQLString)
           },
           gender: {
             type: new GraphQLNonNull(GraphQLString)
+          },
+          imageUrl: {
+            type: new GraphQLNonNull(GraphQLString)
           }
         },
         resolve(_, args){
-          return DB.profiles.userdata.create({
-            googleid: args.googleid,
-            displayname: args.displayname,
-            imageurl: args.imageurl,
-            gender: args.gender
+          return DB.models.profiles.ProfileData.create({
+            userId: args.userId,
+            displayName: args.displayName,
+            gender: args.gender,
+            imageUrl: args.imageUrl
           });
         }
       }
@@ -94,9 +91,9 @@ const Mutation = new graphql.GraphQLObjectType({
   }
 });
 
-module.exports = new GraphQLSchema({
+const Schema = new GraphQLSchema({
   query: Query,
   mutation: Mutation
 });
 
-
+module.exports = Schema;
