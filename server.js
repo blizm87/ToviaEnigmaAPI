@@ -7,7 +7,7 @@ const morgan = require('morgan');
 const methodOverride = require('method-override');
 const path = require('path');
 const graphQLHTTP = require('express-graphql')
-const Schema = require('./db/testSchema.js');
+const Schema = require('./db/schema.js');
 
 const app = express();
 const http = require('http').Server(app);

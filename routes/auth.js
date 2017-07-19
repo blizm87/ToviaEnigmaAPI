@@ -55,29 +55,52 @@ router.get('/callback', (req, res, next) => {
       //   image_url: 'https://lh6.googleusercontent.com/-bntcPsxqf_g/AAAAAAAAAAI/AAAAAAAAACQ/wjTYTpCn-fg/photo.jpg?sz=50',
       //   gender: 'male'
       // }
+
       const userInfo = JSON.parse(body);
       const imageUrl = userInfo.image.url
 
+      let query = `mutation {
+            addProfileData(
+              userId: \"${userInfo.id}\",
+              displayName: \"${userInfo.displayName}\",
+              gender: \"${userInfo.gender}\",
+              imageUrl: \"${imageUrl}\"
+            ) {
+              userId
+            }
+        }`
 
-      let userData = DB.define('profiles',
-        {
-          userId: Sequelize.STRING,
-          displayName: Sequelize.STRING,
-          gender: Sequelize.STRING,
-          imageUrl: Sequelize.STRING
-        }, {
-          freezeTableName: true
-        });
+      const  profData = {
+        headers: { "Content-type": "application/json", "Accept": "application/json"},
+        body: JSON.stringify({query,"variables":null,"operationName":null})
+      }
 
-      DB.sync()
-        .then(() => userData.create({
-          userId: userInfo.id,
-          displayName: userInfo.displayName,
-          gender: userInfo.gender,
-          imageUrl: imageUrl
-        }))
+      request.post(`http://127.0.0.1:3001/graphql`, profData, (err, response, body) => {
+        console.log(err)
+        console.log(body)
+        console.log(profData)
+        res.redirect(`http://127.0.0.1:3000?userId=${userInfo.id}`)
+      });
 
-      res.redirect(`http://127.0.0.1:3000?userId=${userInfo.id}`)
+      // let userData = DB.define('profiles',
+      //   {
+      //     userId: Sequelize.STRING,
+      //     displayName: Sequelize.STRING,
+      //     gender: Sequelize.STRING,
+      //     imageUrl: Sequelize.STRING
+      //   }, {
+      //     freezeTableName: true
+      //   });
+
+      // DB.sync()
+      //   .then(() => userData.create({
+      //     userId: userInfo.id,
+      //     displayName: userInfo.displayName,
+      //     gender: userInfo.gender,
+      //     imageUrl: imageUrl
+      //   }))
+
+      // res.redirect(`http://127.0.0.1:3000?userId=${userInfo.id}`)
     });
 
   });
