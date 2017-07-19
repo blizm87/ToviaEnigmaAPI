@@ -60,7 +60,7 @@ const Query = new GraphQLObjectType({
 const Mutation = new GraphQLObjectType({
   name: 'Mutation',
   description: 'Posts data to database',
-  fields: () => {
+  fields() {
     return {
       addProfileData: {
         type: ProfileData,
@@ -79,7 +79,7 @@ const Mutation = new GraphQLObjectType({
           }
         },
         resolve(_, args){
-          return DB.models.profiles.ProfileData.create({
+          return DB.models.profiles.create({
             userId: args.userId,
             displayName: args.displayName,
             gender: args.gender,
