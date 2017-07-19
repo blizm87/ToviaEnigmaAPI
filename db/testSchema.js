@@ -50,8 +50,8 @@ const Query = new GraphQLObjectType({
     return {
       getProfileData: {
         type: new GraphQLList(ProfileData),
-        resolve(root, args) {
-          return DB.models.profiles.findAll({where: args});
+        resolve(root) {
+          return DB.models.profiles.findAll();
         }
       }
     };

@@ -17,7 +17,8 @@ const io = require('socket.io')(http);
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(/\/((?!graphql).)*/, bodyParser.urlencoded({ extended: true })); // Excludes graphql
+app.use(/\/((?!graphql).)*/, bodyParser.json()); // Excludes graphql
 app.use(session({secret: 'keyboard cat', resave: false, saveUninitialized: true}));
 app.use(methodOverride('_method'));
 
