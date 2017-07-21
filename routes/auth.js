@@ -38,16 +38,15 @@ router.get('/callback', (req, res, next) => {
   }
   request.post(url, {form}, (err, resp, body) => {
     const data = JSON.parse(body);
-    req.session.access_token = data.access_token;
     url = 'https://www.googleapis.com/plus/v1/people/me';
-    const access_token = req.session.access_token;
+    const access_token = data.access_token;
     const options = {
       method: 'GET',
       url,
       headers: { 'Authorization' : `Bearer ${access_token}`}
     }
 
-    request(options, (err, response, body) => {
+    request(options, (err, response, body2) => {
 
       // body = {
       //   id: '105883015749867115220',
@@ -56,8 +55,10 @@ router.get('/callback', (req, res, next) => {
       //   gender: 'male'
       // }
 
-      const userInfo = JSON.parse(body);
-      const imageUrl = userInfo.image.url
+      const userInfo = JSON.parse(body2);
+      const imageUrl = userInfo.image.url;
+
+      console.log(userInfo)
 
       let query = `mutation {
             addProfileData(
@@ -75,9 +76,9 @@ router.get('/callback', (req, res, next) => {
         body: JSON.stringify({query,"variables":null,"operationName":null})
       }
 
-      request.post(`http://127.0.0.1:3001/graphql`, profData, (err, response, body) => {
+      request.post(`http://127.0.0.1:3001/graphql`, profData, (err, response, body3) => {
         console.log(err)
-        console.log(body)
+        console.log(body3)
         console.log(profData)
         res.redirect(`http://127.0.0.1:3000?userId=${userInfo.id}`)
       });

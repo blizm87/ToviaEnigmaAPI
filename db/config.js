@@ -32,12 +32,46 @@ let userData = Connection.define('profiles',
     imageUrl: Sequelize.STRING
   });
 
+let messages = Connection.define('messages',
+  {
+    toUser: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    fromUser: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    passPhrase: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    content: {
+      type: Sequelize.TEXT,
+      allowNull: false
+    },
+    expireDate: {
+      type: Sequelize.DATEONLY,
+      allowNull: false
+    }
+})
+
+userData.hasMany(messages);
+messages.belongsTo(userData);
+
 Connection.sync({force: true})
   .then(() => userData.create({
     userId: '7487',
     displayName: 'JSAM',
     gender: 'male',
     imageUrl: 'BlackFACE'
+  }))
+  .then(() => messages.create({
+    toUser: 'user1',
+    fromUser: 'user2',
+    passPhrase: 'testPhrase',
+    content: 'this is a test message',
+    expireDate: new Date(Date.now())
   }))
 
 module.exports = Connection;
