@@ -1,6 +1,6 @@
 const express = require('express');
-const request = require('request');
 const router = express.Router();
+const request = require('request');
 const Sequelize = require('sequelize');
 const DB = require('../db/config.js');
 const mySchema = require('../db/schema');
@@ -45,9 +45,7 @@ router.get('/callback', (req, res, next) => {
       url,
       headers: { 'Authorization' : `Bearer ${access_token}`}
     }
-
     request(options, (err, response, body2) => {
-
       // body = {
       //   id: '105883015749867115220',
       //   displayName: 'Justin Samuels',
@@ -58,50 +56,25 @@ router.get('/callback', (req, res, next) => {
       const userInfo = JSON.parse(body2);
       const imageUrl = userInfo.image.url;
 
-      console.log(userInfo)
+      let userData = DB.define('profiles',
+        {
+          userId: Sequelize.STRING,
+          displayName: Sequelize.STRING,
+          gender: Sequelize.STRING,
+          imageUrl: Sequelize.STRING
+        }, {
+          freezeTableName: true
+        });
 
-      let query = `mutation {
-            addProfileData(
-              userId: \"${userInfo.id}\",
-              displayName: \"${userInfo.displayName}\",
-              gender: \"${userInfo.gender}\",
-              imageUrl: \"${imageUrl}\"
-            ) {
-              userId
-            }
-        }`
+      DB.sync()
+        .then(() => userData.create({
+          userId: userInfo.id,
+          displayName: userInfo.displayName,
+          gender: userInfo.gender,
+          imageUrl: imageUrl
+        }))
 
-      const  profData = {
-        headers: { "Content-type": "application/json", "Accept": "application/json"},
-        body: JSON.stringify({query,"variables":null,"operationName":null})
-      }
-
-      request.post(`http://127.0.0.1:3001/graphql`, profData, (err, response, body3) => {
-        console.log(err)
-        console.log(body3)
-        console.log(profData)
-        res.redirect(`http://127.0.0.1:3000?userId=${userInfo.id}`)
-      });
-
-      // let userData = DB.define('profiles',
-      //   {
-      //     userId: Sequelize.STRING,
-      //     displayName: Sequelize.STRING,
-      //     gender: Sequelize.STRING,
-      //     imageUrl: Sequelize.STRING
-      //   }, {
-      //     freezeTableName: true
-      //   });
-
-      // DB.sync()
-      //   .then(() => userData.create({
-      //     userId: userInfo.id,
-      //     displayName: userInfo.displayName,
-      //     gender: userInfo.gender,
-      //     imageUrl: imageUrl
-      //   }))
-
-      // res.redirect(`http://127.0.0.1:3000?userId=${userInfo.id}`)
+      res.redirect(`http://127.0.0.1:3000?userId=${userInfo.id}`)
     });
 
   });

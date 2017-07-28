@@ -6,12 +6,7 @@ const Connection = new Sequelize(
   'Elephant87',
   {
     dialect: 'postgres',
-    host: 'localhost',
-    pool: {
-      max: 5,
-      min: 0,
-      idle: 10000
-    },
+    host: 'localhost'
   }
 );
 
@@ -24,15 +19,27 @@ Connection
     console.error('Unable to connect to the database:', err);
   });
 
-let userData = Connection.define('profiles',
+const User = Connection.define('profile',
   {
-    userId: Sequelize.STRING,
-    displayName: Sequelize.STRING,
-    gender: Sequelize.STRING,
-    imageUrl: Sequelize.STRING
+    userId: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    displayName: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    gender: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    imageUrl: {
+      type: Sequelize.STRING,
+      allowNull: false
+    }
   });
 
-let messages = Connection.define('messages',
+const Message = Connection.define('message',
   {
     toUser: {
       type: Sequelize.STRING,
@@ -51,27 +58,33 @@ let messages = Connection.define('messages',
       allowNull: false
     },
     expireDate: {
-      type: Sequelize.DATEONLY,
+      type: Sequelize.DATE,
       allowNull: false
     }
-})
-
-userData.hasMany(messages);
-messages.belongsTo(userData);
+});
+// console.log('I AM THE DATEONLY DATATYPE: ')
+// console.log(Sequelize.DATEONLY)
+// console.log(typeof Sequelize.DATEONLY)
+User.hasMany(Message);
+Message.belongsTo(User);
 
 Connection.sync({force: true})
-  .then(() => userData.create({
-    userId: '7487',
-    displayName: 'JSAM',
-    gender: 'male',
-    imageUrl: 'BlackFACE'
-  }))
-  .then(() => messages.create({
-    toUser: 'user1',
-    fromUser: 'user2',
-    passPhrase: 'testPhrase',
-    content: 'this is a test message',
-    expireDate: new Date(Date.now())
-  }))
+  .then(() => {
+    return User.create({
+      userId: '7487',
+      displayName: 'JSAM',
+      gender: 'male',
+      imageUrl: 'BlackFACE'
+    })
+    .then( user => {
+      return user.createMessage({
+        toUser: 'user2',
+        fromUser: 'user1',
+        passPhrase: 'testPhrase',
+        content: 'this is a test message',
+        expireDate: new Date(Date.now())
+      });
+    });
+  });
 
 module.exports = Connection;

@@ -26,6 +26,9 @@
     "express-session": "^1.15.3",
     "graphiql": "^0.11.2",
     "graphql": "^0.10.3",
+    "graphql-custom-datetype": "^0.5.0",
+    "graphql-date": "^1.0.3",
+    "graphql-iso-date": "^3.2.0",
     "method-override": "^2.3.9",
     "morgan": "^1.8.2",
     "nodemon": "^1.11.0",
@@ -33,7 +36,7 @@
     "pg": "^6.4.1",
     "pg-hstore": "^2.3.2",
     "request": "^2.81.0",
-    "sequelize": "^4.2.1",
+    "sequelize": "^4.4.2",
     "socket.io": "^2.0.3"
   },
   "devDependencies": {
