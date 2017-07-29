@@ -40,10 +40,16 @@ const ProfileData = new GraphQLObjectType({
           return user.imageUrl;
         }
       },
-      messages: {
+      inbox: {
         type: new GraphQLList(Message),
         resolve(user) {
-          return user.getMessages();
+          return user.getInbox_messages();
+        }
+      },
+      outbox: {
+        type: new GraphQLList(Message),
+        resolve(user) {
+          return user.getOutbox_messages();
         }
       }
     };
@@ -65,6 +71,12 @@ const Message = new GraphQLObjectType({
         type: GraphQLString,
         resolve(message) {
           return message.fromUser;
+        }
+      },
+      fromUserId: {
+        type: GraphQLString,
+        resolve(message) {
+          return message.fromUserId;
         }
       },
       passPhrase: {
@@ -141,13 +153,16 @@ const Mutation = new GraphQLObjectType({
           });
         }
       },
-      createMessage: {
+      sendMessage: {
         type: Message,
         args: {
           toUser: {
             type: new GraphQLNonNull(GraphQLString)
           },
           fromUser: {
+            type: new GraphQLNonNull(GraphQLString)
+          },
+          fromUserId: {
             type: new GraphQLNonNull(GraphQLString)
           },
           passPhrase: {
@@ -165,6 +180,7 @@ const Mutation = new GraphQLObjectType({
           return DB.models.message.create({
             toUser: args.toUser,
             fromUser: args.fromUser,
+            fromUserId: args.fromUserId,
             passPhrase: args.passPhrase,
             content: args.content,
             expireDate: args.expireDate

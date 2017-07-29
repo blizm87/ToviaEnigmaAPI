@@ -39,13 +39,45 @@ const User = Connection.define('profile',
     }
   });
 
-const Message = Connection.define('message',
+const InMessage = Connection.define('inbox_message',
   {
     toUser: {
       type: Sequelize.STRING,
       allowNull: false
     },
     fromUser: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    fromUserId: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    passPhrase: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    content: {
+      type: Sequelize.TEXT,
+      allowNull: false
+    },
+    expireDate: {
+      type: Sequelize.DATE,
+      allowNull: false
+    }
+});
+
+const OutMessage = Connection.define('outbox_message',
+  {
+    toUser: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    fromUser: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    fromUserId: {
       type: Sequelize.STRING,
       allowNull: false
     },
@@ -65,8 +97,10 @@ const Message = Connection.define('message',
 // console.log('I AM THE DATEONLY DATATYPE: ')
 // console.log(Sequelize.DATEONLY)
 // console.log(typeof Sequelize.DATEONLY)
-User.hasMany(Message);
-Message.belongsTo(User);
+User.hasMany(OutMessage);
+User.hasMany(InMessage);
+OutMessage.belongsTo(User);
+InMessage.belongsTo(User);
 
 Connection.sync({force: true})
   .then(() => {
@@ -77,11 +111,20 @@ Connection.sync({force: true})
       imageUrl: 'BlackFACE'
     })
     .then( user => {
-      return user.createMessage({
+      user.createOutbox_message({
         toUser: 'user2',
         fromUser: 'user1',
+        fromUserId: '7487',
         passPhrase: 'testPhrase',
-        content: 'this is a test message',
+        content: 'this is a sent message',
+        expireDate: new Date(Date.now())
+      });
+      user.createInbox_message({
+        toUser: 'user1',
+        fromUser: 'user2',
+        fromUserId: 'Lav',
+        passPhrase: 'testPhrase',
+        content: 'this is a received message',
         expireDate: new Date(Date.now())
       });
     });

@@ -1,10 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const request = require('request');
-const Sequelize = require('sequelize');
 const DB = require('../db/config.js');
-const mySchema = require('../db/schema');
-const { graphql, buildSchema } = require('graphql');
 
 const client_id = process.env.GOOGLE_CLIENT_ID;
 const client_secret = process.env.GOOGLE_CLIENT_SECRET;
@@ -56,27 +53,21 @@ router.get('/callback', (req, res, next) => {
       const userInfo = JSON.parse(body2);
       const imageUrl = userInfo.image.url;
 
-      let userData = DB.define('profiles',
-        {
-          userId: Sequelize.STRING,
-          displayName: Sequelize.STRING,
-          gender: Sequelize.STRING,
-          imageUrl: Sequelize.STRING
-        }, {
-          freezeTableName: true
-        });
-
       DB.sync()
-        .then(() => userData.create({
-          userId: userInfo.id,
-          displayName: userInfo.displayName,
-          gender: userInfo.gender,
-          imageUrl: imageUrl
-        }))
-
-      res.redirect(`http://127.0.0.1:3000?userId=${userInfo.id}`)
+        .then(() => DB.models.profile.findAll({where: {userId: userInfo.id}})
+          .then((member) => {
+            if(member.length == 0){
+              DB.models.profile.create({
+                userId: userInfo.id,
+                displayName: userInfo.displayName,
+                gender: userInfo.gender,
+                imageUrl: imageUrl
+              })
+            }
+            res.redirect(`http://127.0.0.1:3000?userId=${userInfo.id}`)
+          })
+        )
     });
-
   });
 })
 
