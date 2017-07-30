@@ -1,5 +1,6 @@
 const {
   graphql,
+  GraphQLInt,
   GraphQLString,
   GraphQLList,
   GraphQLNonNull,
@@ -16,6 +17,12 @@ const ProfileData = new GraphQLObjectType({
   description: 'This represents a user profile data.',
   fields: () => {
     return {
+      id: {
+        type: GraphQLInt,
+        resolve(message) {
+          return message.id;
+        }
+      },
       userId: {
         type: GraphQLString,
         resolve(user) {
@@ -61,6 +68,12 @@ const Message = new GraphQLObjectType({
   description: 'This represents a user profile data.',
   fields: () => {
     return {
+      id: {
+        type: GraphQLInt,
+        resolve(message) {
+          return message.id;
+        }
+      },
       toUser: {
         type: GraphQLString,
         resolve(message) {
@@ -97,6 +110,12 @@ const Message = new GraphQLObjectType({
         resolve(message) {
           return message.expireDate;
         }
+      },
+      createdAt: {
+        type: GraphQLString,
+        resolve(message) {
+          return message.createdAt;
+        }
       }
     };
   }
@@ -109,14 +128,13 @@ const Query = new GraphQLObjectType({
     return {
       getProfileData: {
         type: new GraphQLList(ProfileData),
+        args: {
+          userId: {
+            type: GraphQLString
+          }
+        },
         resolve(root, args) {
           return DB.models.profile.findAll({where: args});
-        }
-      },
-      getMessages: {
-        type: new GraphQLList(Message),
-        resolve(root, args) {
-          return DB.models.message.findAll({where: args});
         }
       }
     };

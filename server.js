@@ -32,21 +32,6 @@ app.use('/graphql', graphQLHTTP({
   pretty: true
 }));
 
-              // <Table
-              //   model={UserModelInbox}
-              //   onSelect={this.handleSelect}
-              //   selectable
-              //   selected={this.state.selected}
-              //   source={this.state.source}
-              // />
-              //   <Table
-              //   model={UserModelOutbox}
-              //   onSelect={this.handleSelect}
-              //   selectable
-              //   selected={this.state.selected}
-              //   source={this.state.source}
-              // />
-
 // SOCKET
 const sockets = require('./routes/sockets')(io);
 

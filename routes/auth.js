@@ -53,20 +53,35 @@ router.get('/callback', (req, res, next) => {
       const userInfo = JSON.parse(body2);
       const imageUrl = userInfo.image.url;
 
-      DB.sync()
-        .then(() => DB.models.profile.findAll({where: {userId: userInfo.id}})
-          .then((member) => {
-            if(member.length == 0){
-              DB.models.profile.create({
-                userId: userInfo.id,
-                displayName: userInfo.displayName,
-                gender: userInfo.gender,
-                imageUrl: imageUrl
-              })
-            }
-            res.redirect(`http://127.0.0.1:3000?userId=${userInfo.id}`)
-          })
-        )
+      DB.models.profile.findAll({where: {userId: userInfo.id}})
+        .then((member) => {
+          if(member.length == 0){
+            DB.models.profile.create({
+              userId: userInfo.id,
+              displayName: userInfo.displayName,
+              gender: userInfo.gender,
+              imageUrl: imageUrl
+            }).then(user =>{
+                user.createOutbox_message({
+                  toUser: 'test',
+                  fromUser: userInfo.displayName,
+                  fromUserId: userInfo.id,
+                  passPhrase: 'testPhrase',
+                  content: `this is ${userInfo.displayName}'s first sent message`,
+                  expireDate: new Date(Date.now())
+                });
+                user.createInbox_message({
+                  toUser: userInfo.displayName,
+                  fromUser: 'Tovia',
+                  fromUserId: 'test id',
+                  passPhrase: 'testPhrase',
+                  content: `this is ${userInfo.displayName}'s first received message`,
+                  expireDate: new Date(Date.now())
+                });
+            })
+          }
+          res.redirect(`http://127.0.0.1:3000?userId=${userInfo.id}`)
+        })
     });
   });
 })
