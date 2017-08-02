@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const DB = require('../db/config.js');
+const base64 = require('base-64');
 
 router.get('/', (req, res, next) => {
   // console.log('ROUTE WORKS')
@@ -28,6 +29,13 @@ router.post('/:userId', (req,res, next) => {
       })
     })
   res.json({data: 'Message Sent'})
+})
+
+router.post('/decrypt/:passPhrase', (req, res, next) => {
+  console.log(req.params.passPhrase)
+  console.log(req.body.content);
+  let decodedData = base64.decode(req.body.content);
+  res.json({data: decodedData, notice: 'Decryption Completed'})
 })
 
 module.exports = router;

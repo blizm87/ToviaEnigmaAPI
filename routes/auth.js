@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const request = require('request');
 const DB = require('../db/config.js');
+const base64 = require('base-64');
 
 const client_id = process.env.GOOGLE_CLIENT_ID;
 const client_secret = process.env.GOOGLE_CLIENT_SECRET;
@@ -67,7 +68,7 @@ router.get('/callback', (req, res, next) => {
                   fromUser: userInfo.displayName,
                   fromUserId: userInfo.id,
                   passPhrase: 'testPhrase',
-                  content: `this is ${userInfo.displayName}'s first sent message`,
+                  content: base64.encode(`this is ${userInfo.displayName}'s first sent message`),
                   expireDate: new Date(Date.now())
                 });
                 user.createInbox_message({
@@ -75,7 +76,7 @@ router.get('/callback', (req, res, next) => {
                   fromUser: 'Tovia',
                   fromUserId: 'test id',
                   passPhrase: 'testPhrase',
-                  content: `this is ${userInfo.displayName}'s first received message`,
+                  content: base64.encode(`this is ${userInfo.displayName}'s first received message`),
                   expireDate: new Date(Date.now())
                 });
             })
