@@ -123,6 +123,9 @@ const Query = new GraphQLObjectType({
         args: {
           userId: {
             type: GraphQLString
+          },
+          displayName: {
+            type: GraphQLString
           }
         },
         resolve(root, args) {
@@ -133,76 +136,8 @@ const Query = new GraphQLObjectType({
   }
 });
 
-const Mutation = new GraphQLObjectType({
-  name: 'Mutation',
-  description: 'Posts data to database',
-  fields() {
-    return {
-      addProfileData: {
-        type: ProfileData,
-        args: {
-          userId: {
-            type: new GraphQLNonNull(GraphQLString)
-          },
-          displayName: {
-            type: new GraphQLNonNull(GraphQLString)
-          },
-          gender: {
-            type: new GraphQLNonNull(GraphQLString)
-          },
-          imageUrl: {
-            type: new GraphQLNonNull(GraphQLString)
-          }
-        },
-        resolve(_, args){
-          return DB.models.profile.create({
-            userId: args.userId,
-            displayName: args.displayName,
-            gender: args.gender,
-            imageUrl: args.imageUrl
-          });
-        }
-      },
-      sendMessage: {
-        type: Message,
-        args: {
-          toUser: {
-            type: new GraphQLNonNull(GraphQLString)
-          },
-          fromUser: {
-            type: new GraphQLNonNull(GraphQLString)
-          },
-          fromUserId: {
-            type: new GraphQLNonNull(GraphQLString)
-          },
-          passPhrase: {
-            type: new GraphQLNonNull(GraphQLString)
-          },
-          content: {
-            type: new GraphQLNonNull(GraphQLString)
-          },
-          expireDate: {
-            type: new GraphQLNonNull(GraphQLString)
-          }
-        },
-        resolve(_, args){
-          return DB.models.message.create({
-            toUser: args.toUser,
-            fromUser: args.fromUser,
-            fromUserId: args.fromUserId,
-            passPhrase: args.passPhrase,
-            content: args.content,
-            expireDate: args.expireDate
-          });
-        }
-      }
-    };
-  }
-});
-
 const Schema = new GraphQLSchema({
-  query: Query,
-  mutation: Mutation
+  query: Query
 });
 
 module.exports = Schema;
