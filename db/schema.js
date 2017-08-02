@@ -8,7 +8,6 @@ const {
   GraphQLInputObjectType,
   GraphQLSchema
 } = require('graphql');
-const GraphQLDate = require('graphql-iso-date');
 
 const DB = require('./config.js');
 
@@ -105,7 +104,6 @@ const Message = new GraphQLObjectType({
         }
       },
       expireDate: {
-        // type: GraphQLDate,
         type: GraphQLString,
         resolve(message) {
           return message.expireDate;
@@ -191,7 +189,6 @@ const Mutation = new GraphQLObjectType({
           },
           expireDate: {
             type: new GraphQLNonNull(GraphQLString)
-            // type: GraphQLDate
           }
         },
         resolve(_, args){
@@ -208,8 +205,6 @@ const Mutation = new GraphQLObjectType({
     };
   }
 });
-
-console.log(GraphQLDate)
 
 const Schema = new GraphQLSchema({
   query: Query,

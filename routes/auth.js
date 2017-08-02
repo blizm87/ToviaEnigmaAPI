@@ -44,13 +44,6 @@ router.get('/callback', (req, res, next) => {
       headers: { 'Authorization' : `Bearer ${access_token}`}
     }
     request(options, (err, response, body2) => {
-      // body = {
-      //   id: '105883015749867115220',
-      //   displayName: 'Justin Samuels',
-      //   image_url: 'https://lh6.googleusercontent.com/-bntcPsxqf_g/AAAAAAAAAAI/AAAAAAAAACQ/wjTYTpCn-fg/photo.jpg?sz=50',
-      //   gender: 'male'
-      // }
-
       const userInfo = JSON.parse(body2);
       const imageUrl = userInfo.image.url;
 

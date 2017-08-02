@@ -23,7 +23,6 @@ app.use(session({secret: 'keyboard cat', resave: false, saveUninitialized: true}
 app.use(methodOverride('_method'));
 
 // ROUTES
-app.use('/', require('./routes/index'));
 app.use('/auth', require('./routes/auth'));
 app.use('/profile', require('./routes/profile'));
 app.use('/graphql', graphQLHTTP({
