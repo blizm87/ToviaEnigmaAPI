@@ -85,12 +85,6 @@ const Message = new GraphQLObjectType({
           return message.fromUser;
         }
       },
-      fromUserId: {
-        type: GraphQLString,
-        resolve(message) {
-          return message.fromUserId;
-        }
-      },
       passPhrase: {
         type: GraphQLString,
         resolve(message) {

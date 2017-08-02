@@ -41,15 +41,7 @@ const User = Connection.define('profile',
 
 const InMessage = Connection.define('inbox_message',
   {
-    toUser: {
-      type: Sequelize.STRING,
-      allowNull: false
-    },
     fromUser: {
-      type: Sequelize.STRING,
-      allowNull: false
-    },
-    fromUserId: {
       type: Sequelize.STRING,
       allowNull: false
     },
@@ -73,14 +65,6 @@ const OutMessage = Connection.define('outbox_message',
       type: Sequelize.STRING,
       allowNull: false
     },
-    fromUser: {
-      type: Sequelize.STRING,
-      allowNull: false
-    },
-    fromUserId: {
-      type: Sequelize.STRING,
-      allowNull: false
-    },
     passPhrase: {
       type: Sequelize.STRING,
       allowNull: false
@@ -94,9 +78,7 @@ const OutMessage = Connection.define('outbox_message',
       allowNull: false
     }
 });
-// console.log('I AM THE DATEONLY DATATYPE: ')
-// console.log(Sequelize.DATEONLY)
-// console.log(typeof Sequelize.DATEONLY)
+
 User.hasMany(OutMessage);
 User.hasMany(InMessage);
 OutMessage.belongsTo(User);
@@ -113,16 +95,12 @@ Connection.sync({force: true})
     .then( user => {
       user.createOutbox_message({
         toUser: 'user2',
-        fromUser: 'user1',
-        fromUserId: '7487',
         passPhrase: 'testPhrase',
         content: 'this is a sent message',
         expireDate: new Date(Date.now())
       });
       user.createInbox_message({
-        toUser: 'user1',
         fromUser: 'user2',
-        fromUserId: 'Lav',
         passPhrase: 'testPhrase',
         content: 'this is a received message',
         expireDate: new Date(Date.now())
