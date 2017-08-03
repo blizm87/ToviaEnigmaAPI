@@ -1,12 +1,10 @@
 
 function sockets(io){
   io.on('connection', function(socket){
-    console.log('a user connected');
-
-    socket.on('room', function(data) {
-
-    })
-
+    socket.emit('news', { hello: 'world' });
+    socket.on('my other event', function (data) {
+      console.log(data);
+    });
   });
 
 }

@@ -58,13 +58,13 @@ router.get('/callback', (req, res, next) => {
             }).then(user =>{
                 user.createOutbox_message({
                   toUser: 'test',
-                  passPhrase: 'testPhrase',
+                  passPhrase: 'testO',
                   content: base64.encode(`this is ${userInfo.displayName}'s first sent message`),
                   expireDate: new Date(Date.now())
                 });
                 user.createInbox_message({
                   fromUser: 'Tovia',
-                  passPhrase: 'testPhrase',
+                  passPhrase: 'testI',
                   content: base64.encode(`this is ${userInfo.displayName}'s first received message`),
                   expireDate: new Date(Date.now())
                 });
