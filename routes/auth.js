@@ -11,8 +11,12 @@ router.get('/', (req, res, next) => {
   console.log('I AM THE PROCESS')
   console.log(client_id)
   console.log(process.env.PORT)
-  console.log(process.env.prod)
+  console.log(process.env.HOST)
+  console.log(process.env.host)
+  console.log(process.env.DATABASE)
+  console.log(process.env.database)
   console.log(process.env.PROD)
+  console.log(process.env.prod)
   if(!process.env.prod) {
     var redirect_uri = 'http://127.0.0.1:3001/auth/callback';
   } else {
