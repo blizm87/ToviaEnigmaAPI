@@ -9,7 +9,7 @@ const client_secret = process.env.GOOGLE_CLIENT_SECRET;
 
 router.get('/', (req, res, next) => {
   console.log('I AM THE PROCESS')
-  console.log(process.env.prod)
+  console.log(client_id)
   if(!process.env.prod) {
     var redirect_uri = 'http://127.0.0.1:3001/auth/callback';
   } else {
