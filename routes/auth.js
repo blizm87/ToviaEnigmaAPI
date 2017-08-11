@@ -77,9 +77,9 @@ router.get('/callback', (req, res, next) => {
             })
           }
           if(!process.env.prod) {
-            res.redirect(`http://127.0.0.1:3000?userId=${userInfo.id}`)
-          } else {
             res.redirect(`https://afternoon-cliffs-80859.herokuapp.com?userId=${userInfo.id}`)
+          } else {
+            res.redirect(`http://127.0.0.1:3000?userId=${userInfo.id}`)
           }
         })
     });
