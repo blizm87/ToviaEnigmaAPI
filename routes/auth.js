@@ -9,7 +9,7 @@ const client_secret = process.env.GOOGLE_CLIENT_SECRET;
 
 router.get('/', (req, res, next) => {
   console.log('I AM THE PROCESS')
-  console.log(client_id)
+  console.log(process.env.GOOGLE_CLIENT_ID)
   console.log(process.env.PORT)
 
   if(!process.env.prod) {
