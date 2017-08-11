@@ -49,6 +49,8 @@ router.get('/callback', (req, res, next) => {
     }
     request(options, (err, response, body2) => {
       const userInfo = JSON.parse(body2);
+      console.log('I AM THE USERINFO: ')
+      console.log(userInfo)
       const imageUrl = userInfo.image.url;
 
       DB.models.profile.findAll({where: {userId: userInfo.id}})
