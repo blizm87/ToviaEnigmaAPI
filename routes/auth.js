@@ -1,4 +1,3 @@
-require('dotenv').config()
 const express = require('express');
 const router = express.Router();
 const request = require('request');
@@ -10,7 +9,7 @@ const client_secret = process.env.GOOGLE_CLIENT_SECRET;
 
 router.get('/', (req, res, next) => {
   console.log('I AM THE PROCESS')
-  console.log(process.env.GOOGLE_CLIENT_ID)
+  console.log(process.env.prod)
   console.log(process.env.PORT)
 
   if(!process.env.prod) {
