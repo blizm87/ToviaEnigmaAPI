@@ -18,6 +18,8 @@ Connection
     console.log('Connection has been established successfully.');
   })
   .catch(err => {
+    console.log('I AM DATABASE URL: ')
+    console.log(process.env.DATABASE_URL)
     console.error('Unable to connect to the database:', err);
   });
 
