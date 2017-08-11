@@ -25,9 +25,9 @@ router.get('/', (req, res, next) => {
 
 router.get('/callback', (req, res, next) => {
   if(!process.env.prod) {
-    var redirect_uri = 'http://127.0.0.1:3001/auth/callback';
-  } else {
     var redirect_uri = 'https://nameless-brook-20005.herokuapp.com/auth/callback'
+  } else {
+    var redirect_uri = 'http://127.0.0.1:3001/auth/callback';
   }
   const {code, state} = req.query;
   let url = 'https://www.googleapis.com/oauth2/v4/token';
