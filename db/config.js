@@ -1,14 +1,16 @@
 const Sequelize = require('sequelize');
 
-const Connection = new Sequelize(
-  'toviadb',
-  'Jblizm87',
-  'Elephant87',
-  {
-    dialect: 'postgres',
-    host: 'localhost'
-  }
-);
+// const Connection = new Sequelize(
+//   'toviadb',
+//   'Jblizm87',
+//   'Elephant87',
+//   {
+//     dialect: 'postgres',
+//     host: 'localhost'
+//   }
+// );
+
+const Connection = new Sequelize(process.env.DATABASE_URL, { dialect: 'postgres'});
 
 Connection
   .authenticate()
