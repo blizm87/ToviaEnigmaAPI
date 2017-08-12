@@ -8,11 +8,7 @@ const client_id = process.env.GOOGLE_CLIENT_ID;
 const client_secret = process.env.GOOGLE_CLIENT_SECRET;
 
 router.get('/', (req, res, next) => {
-  console.log('I AM THE PROCESS')
-  console.log(client_id)
-  console.log(process.env.PORT)
-
-  if(!process.env.prod) {
+  if(process.env.NODE_ENV === 'production') {
     var redirect_uri = 'https://nameless-brook-20005.herokuapp.com/auth/callback';
   } else {
     var redirect_uri = 'http://127.0.0.1:3001/auth/callback';
@@ -21,10 +17,10 @@ router.get('/', (req, res, next) => {
   const url = 'https://accounts.google.com/o/oauth2/v2/auth';
   const queryParams = `response_type=code&client_id=${client_id}&scope=profile&state=abc&redirect_uri=${redirect_uri}`;
   res.redirect(url + '?' + queryParams);
-})
+});
 
 router.get('/callback', (req, res, next) => {
-  if(!process.env.prod) {
+  if(process.env.NODE_ENV === 'production') {
     var redirect_uri = 'https://nameless-brook-20005.herokuapp.com/auth/callback'
   } else {
     var redirect_uri = 'http://127.0.0.1:3001/auth/callback';
@@ -76,7 +72,7 @@ router.get('/callback', (req, res, next) => {
                 });
             })
           }
-          if(!process.env.prod) {
+          if(process.env.NODE_ENV === 'production') {
             res.redirect(`https://afternoon-cliffs-80859.herokuapp.com?userId=${userInfo.id}`)
           } else {
             res.redirect(`http://127.0.0.1:3000?userId=${userInfo.id}`)
@@ -84,6 +80,6 @@ router.get('/callback', (req, res, next) => {
         })
     });
   });
-})
+});
 
 module.exports = router;
