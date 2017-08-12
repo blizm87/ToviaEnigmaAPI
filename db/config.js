@@ -91,28 +91,33 @@ User.hasMany(InMessage);
 OutMessage.belongsTo(User);
 InMessage.belongsTo(User);
 
-Connection.sync({force: true})
+Connection.sync()
   .then(() => {
-    return User.create({
-      userId: '7487',
-      displayName: 'JSAM',
-      gender: 'male',
-      imageUrl: 'BlackFACE'
+    Connection.models.profile.findAll({where: {userId: '7487'}})
+    .then((member) => {
+      if(member.length == 0) {
+        return User.create({
+          userId: '7487',
+          displayName: 'JSAM',
+          gender: 'male',
+          imageUrl: 'BlackFACE'
+        })
+        .then( user => {
+          user.createOutbox_message({
+            toUser: 'user2',
+            passPhrase: 'testPhrase',
+            content: 'this is a sent message',
+            expireDate: new Date(Date.now())
+          });
+          user.createInbox_message({
+            fromUser: 'user2',
+            passPhrase: 'testPhrase',
+            content: 'this is a received message',
+            expireDate: new Date(Date.now())
+          });
+        });
+      }
     })
-    .then( user => {
-      user.createOutbox_message({
-        toUser: 'user2',
-        passPhrase: 'testPhrase',
-        content: 'this is a sent message',
-        expireDate: new Date(Date.now())
-      });
-      user.createInbox_message({
-        fromUser: 'user2',
-        passPhrase: 'testPhrase',
-        content: 'this is a received message',
-        expireDate: new Date(Date.now())
-      });
-    });
   });
 
 module.exports = Connection;
