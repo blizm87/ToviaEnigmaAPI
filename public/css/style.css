@@ -1,0 +1,84 @@
+html,body {
+  width: 100%;
+  height: 100%;
+}
+
+    #myTest {
+      width: 100%;
+      min-height: 100%;
+      z-index:0;
+    }
+
+        #behind {
+          width: 100%;
+          height: 100%;
+          background-image: url('../assets/images/mindArt2.jpg');
+          background-size: cover;
+          position: absolute;
+          z-index: -1;
+        }
+
+        #overlay {
+          width: 100%;
+          height: 100%;
+          background-image: url('../assets/images/mindArt2.jpg');
+          background-size: cover;
+          -webkit-filter: blur(3px);
+          -moz-filter: blur(3px);
+          -o-filter: blur(3px);
+          -ms-filter: blur(3px);
+          filter: blur(3px);
+          position: absolute;
+          z-index: -1;
+        }
+
+        #welcomeContainer {
+          background-color: rgba(225,245,254, .2);
+          width: 800px;
+          margin-left: auto;
+          margin-right: auto;
+          text-align: center;
+          border: 1px solid transparent;
+          background-color: ;
+          z-index: 1;
+        }
+
+            #welcomeHeader {
+
+            }
+                #welcomeHeader>h1 {
+                  font-weight: bold;
+                  color: black;
+                }
+
+                #welcomeHeader>h5 {
+                  color: black;
+                }
+
+            #welcomeMain {
+              margin-top: 3em;
+              padding-left: 1em;
+              padding-right: 1em;
+              display: flex;
+              align-items: flex-start;
+              justify-content: space-between;
+              flex-wrap: wrap;
+            }
+
+                #devContainer {
+                  width: 49%;
+                  background-color: rgba(225,245,254, .5);
+                }
+
+                    #devContainer>a {
+                      margin-top: .5em;
+                    }
+
+                #prodContainer {
+                  width: 49%;
+                  background-color: rgba(225,245,254, .5);
+                }
+
+                    #prodContainer>a {
+                      margin-top: .5em;
+                    }
